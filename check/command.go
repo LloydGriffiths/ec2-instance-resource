@@ -76,10 +76,11 @@ func (c *Command) instances(request *Request) (string, error) {
 	iids := []string{}
 
 	for page.Next() {
-		if page.Err() != nil {
-			return "", page.Err()
-		}
 		iids = append(iids, extract(page.CurrentPage().Reservations)...)
+	}
+
+	if page.Err() != nil {
+		return strings.Join(iids, "\n"), page.Err()
 	}
 
 	return strings.Join(iids, "\n"), nil
